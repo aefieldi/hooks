@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0a12">
+<title>The Hook Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0a12;--card:#13111d;--line:rgba(183,156,245,.16);--text:#fff;--muted:rgba(255,255,255,.62);--dim:rgba(255,255,255,.4);--lav:#b79cf5;--violet:#7c5cf0;--mint:#7fe0b8;--gold:#e8c878;--r:18px;--pad:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Outfit',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 var(--pad) 60px;max-width:760px;margin:0 auto}
+.grid{background-color:var(--card);background-image:linear-gradient(rgba(183,156,245,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(183,156,245,.045) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:var(--r)}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lav);font-weight:600}
+header{padding:calc(24px + env(safe-area-inset-top)) 0 8px}
+header .who{font-size:13px;color:var(--muted);margin:0 0 4px}
+header h1{font-size:30px;line-height:1.1;margin:0;font-weight:600;letter-spacing:-.01em}
+header h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--lav)}
+header p.sub{color:var(--muted);font-size:14.5px;margin:10px 0 0}
+.search{position:sticky;top:0;z-index:5;margin:12px calc(-1*var(--pad)) 6px;padding:10px var(--pad) 8px;background:linear-gradient(var(--bg) 80%,rgba(11,10,18,0))}
+.search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#13111d;color:#fff;font:inherit;font-size:15px}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 0 2px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);white-space:nowrap;cursor:pointer;font-family:inherit}
+.tab.on{background:var(--violet);border-color:var(--violet);color:#fff}
+.sec{margin:16px 0 0;padding:16px 16px 14px}
+.sec.hide{display:none}
+.sec h2{font-size:22px;margin:4px 0 2px;font-weight:600;line-height:1.2}
+.sec h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--gold)}
+.sec .lead{color:var(--muted);font-size:14px;margin:0 0 10px}
+.sec .src{font-size:11.5px;color:var(--dim);margin:0 0 10px}
+h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--lav);margin:16px 0 6px;font-weight:600}
+ul.hooks{list-style:none;margin:0;padding:0}
+ul.hooks li{position:relative;padding:9px 40px 9px 12px;margin:0 0 6px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:14.5px;line-height:1.4;cursor:pointer;color:rgba(255,255,255,.9)}
+ul.hooks li.hide{display:none}
+ul.hooks li:active{background:rgba(124,92,240,.25)}
+ul.hooks li::after{content:"copy";position:absolute;right:10px;top:9px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+ul.hooks li.ok{border-color:var(--mint)} ul.hooks li.ok::after{content:"copied";color:var(--mint)}
+ul.hooks.title li{font-weight:600;color:#fff}
+ul.hooks li b{color:var(--gold);font-weight:600}
+.rule{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;margin:0 0 9px;font-size:14.5px;color:rgba(255,255,255,.88)}
+.rule b{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:24px;line-height:1;color:var(--lav)}
+.ex{font-size:13.5px;color:var(--muted);font-style:italic;margin:2px 0 10px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+.pair div{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:13.5px}
+.pair div small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.pair .bad{border-color:rgba(255,120,120,.35)} .pair .good{border-color:rgba(127,224,184,.4)}
+.cap{white-space:pre-wrap;font-size:14px;line-height:1.5;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:12px;padding:12px;color:rgba(255,255,255,.9)}
+.cap b{color:#fff}
+.foot{text-align:center;color:var(--dim);font-size:12px;margin:26px 0 0;line-height:1.6}
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:24px;background:#fff;color:#0b0a12;font-weight:600;font-size:13px;padding:9px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:all .25s;z-index:20}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.count{font-size:12px;color:var(--dim);margin:4px 2px 0}
+</style>
+</head>
+<body>
+<header>
+  <p class="who">Spiritual Business Skool · Amanda Fielding-Smith</p>
+  <h1>The <em>Hook</em> Library</h1>
+  <p class="sub">Every verbal hook, re-hook, title hook and YouTube title formula we build content plans from. Tap any line to copy it. Swap the brackets for your topic.</p>
+</header>
+
+<div class="search">
+  <input id="q" type="search" placeholder="Search hooks… (try: confession, vent, mistake, client, 'this is why')" autocomplete="off">
+  <div class="tabs" id="tabs">
+    <button class="tab on" data-tab="all">All</button>
+    <button class="tab" data-tab="rules">How hooks work</button>
+    <button class="tab" data-tab="verbal">Verbal hooks</button>
+    <button class="tab" data-tab="rehook">Re-hooks</button>
+    <button class="tab" data-tab="title">Title hooks</button>
+    <button class="tab" data-tab="yt">YouTube titles</button>
+    <button class="tab" data-tab="cta">CTA + caption</button>
+  </div>
+  <div class="count" id="count"></div>
+</div>
+
+<main id="main"></main>
+
+<p class="foot">Built from Amanda's Fire Your Boss hook list, Rachel Pedersen's 20 viral TikTok hooks, the Creator Hooks and Andrew Muto title frameworks, and the viral title hooks swipe file.<br>Patterns, not scripts. There's no one right way, there's only your way and consistency.</p>
+<div class="toast" id="toast">Copied</div>
+
+<script>
+const S = [];
+
+// ---------- HOW HOOKS WORK ----------
+S.push({tab:'rules', title:'How a hook <em>works</em>', lead:'Five rules that sit under every list on this page.', src:'', html:`
+<div class="rule"><b>1</b><div><strong>Say something different from what's on screen.</strong> The title hook is the text, the verbal hook is the first sentence out of your mouth. If they match, the viewer reads it, hears it, and leaves. Eye and ear each get a reason to stay.</div></div>
+<div class="rule"><b>2</b><div><strong>Title hook: under 5 words, one word in CAPS, an emoji if it fits.</strong> Top or middle of the frame so the caption doesn't cover it. Capitalising the keyword works. Dates and numbers create urgency.</div></div>
+<div class="rule"><b>3</b><div><strong>Re-hook at 3 to 5 seconds, without pausing.</strong> Mid-sentence, as if you forgot to finish the thought. It re-earns the attention the hook bought.</div></div>
+<div class="rule"><b>4</b><div><strong>Every hook triggers one of three feelings.</strong> Curiosity (I need to know), fear (I don't want to get this wrong), desire (I want that). The best ones hit two.</div></div>
+<div class="rule"><b>5</b><div><strong>The McDonald's test.</strong> Someone who works at McDonald's should understand your hook instantly. No jargon, no setup, no "in this video I'm going to".</div></div>
+<h3>The ten principles behind every framework</h3>
+<ul class="hooks">
+<li><b>Curiosity</b> · an open loop they need closed ("what happens to…", "do X really…")</li>
+<li><b>Desire</b> · what they want: clients, money, freedom, being seen</li>
+<li><b>Negativity</b> · warnings and problems grab faster than benefits</li>
+<li><b>Controversy</b> · a counterintuitive or polarising take</li>
+<li><b>Authority</b> · a name, a credential, a number of clients</li>
+<li><b>Specificity</b> · numbers, timeframes, exact examples feel real</li>
+<li><b>Lists</b> · "4 leaks", "5 signs", "3 moves" feel scannable</li>
+<li><b>Constraint</b> · "the ONE thing", "this ONE mistake"</li>
+<li><b>Contrast</b> · "not X, but Y", "same gift, different income"</li>
+<li><b>Speed / ease</b> · "in 30 minutes", "in one sitting", "without posting daily"</li>
+</ul>
+<h3>Dial it to 11, then pull back one notch</h3>
+<ul class="hooks">
+<li>Start: "Your tiers are priced wrong"</li>
+<li>Up: "Why nobody upgrades in your community"</li>
+<li>Up: "The #1 reason nobody upgrades"</li>
+<li>Up: "This pricing mistake is killing your upgrades"</li>
+<li>Too far: "Your pricing is a crime scene" → pull back one</li>
+</ul>
+<h3>Universalise, or narrow on purpose</h3>
+<div class="pair"><div class="bad"><small>Filters the audience</small>"Five pricing myths every astrologer believes"</div><div class="good"><small>Universal</small>"Five pricing myths"</div></div>
+<p class="ex">Every word after the hook is a filter. Narrow only when the callout IS the strategy: "Libra Rising" and "Projectors" narrow on purpose, because the right person self-identifies hard.</p>
+`});
+
+// ---------- VERBAL HOOKS ----------
+const FYB_EDU = [
+"Let me show you my favorite way to [X].",
+"If I had just [limited] minutes every day to work towards [core desire], here's exactly what I'd do.",
+"Here is a beginner-friendly way to [achieve core desire].",
+"Here are more creative ways for you to [achieve core desire].",
+"Things I had to unlearn in order to [achieve result].",
+"It's time to start talking about something a lot of you don't want to talk about, and that's [X].",
+"The mindset behind a successful [niche role] vs. an unsuccessful one comes down to this…",
+"If you are currently in the process of [niche journey], listen up, this video is for you.",
+"Give me 1 minute and I'll show you how to [X].",
+"5 [niche] hacks.",
+"The biggest missing link with your [niche journey] is…",
+"Is [strategy] a viable way to achieve [goal]? Let's talk about it.",
+"3 [niche] strategies.",
+"Here are 4 ways that you can [achieve X].",
+"In case you didn't know, [shocking niche fact].",
+"This is probably why you're unable to [X]…",
+"One of the most important things to remember in regards to [niche] is…",
+"Here is what to do if you [confusing scenario your audience runs into].",
+"Ok, hear me out. [Uncommon or new strategy in your niche.]",
+"Without these 3 things, I probably would've never been able to [achieve audience desire].",
+"Here's exactly what I'd do if I wanted to [achieve specific result].",
+"If I wanted to achieve [desired result] in 1 month, here's what I would do.",
+"I'm going to give you the simplest way to achieve [result].",
+"If you do X things, you'll have Y result by Z time frame.",
+"If you want [specific desire], do these few things.",
+"[X] started [X] when… (my clients started booking from their reels when…)",
+];
+const FYB_STORY = [
+"Imagine having [X result] and now you get to [X]. Here's how.",
+"So I don't think enough people know that you can actually get [X result] without doing [X].",
+"I dare you to imagine what life would be like when [X] happens. Okay, now let me show you how easy it can be.",
+"Your future [bank account / calendar / community] will thank you if you start doing this.",
+"Here's what no one else is going to tell you about [niche].",
+"I'm never going to stop talking about…",
+"Can I vent for a second?",
+"They'll tell you that [thing you disagree with] matters. When in reality, it's all about [thing you stand by].",
+"I wish someone had told me [this] before [doing this].",
+"You want to know what… [rant]",
+"Do you ever wonder what it would be like if you had just…",
+"Did you know that you could…",
+"I don't know who needs to hear this but…",
+"So, what is the difference between [X] and [Y]?",
+"The most common misconception when it comes to [niche] is…",
+"I don't think you understand the importance of [key niche strategy].",
+"I'm finally starting to realize that [realization]…",
+"I have a confession to make…",
+"Hate to break it to you but…",
+"Are you interested in learning [X]?",
+"What's wrong with [something you disagree with in your industry]? I'll tell you.",
+"I want you to think about this [perspective change].",
+"Why does no one talk about…",
+"[X] won't help you [achieve Y]… instead it will…",
+"If you've ever wondered how [niche phenomenon] works, let's talk about it. I'm a [your title]…",
+"Have you ever wondered…",
+"More people need to know about…",
+"[X] will always beat out [Y]. (A content strategy will always beat posting and praying.)",
+"You should not watch this video unless you care about…",
+"Is anyone else annoyed at [harmful myth or belief in your niche]?",
+"Put down whatever you're doing and let this sink in: [mic drop wisdom].",
+];
+const FYB_AUTH = [
+"I've been using this to [achieve result] myself. And I've helped [client] [achieve result].",
+"If you think it's gonna take you years to get [X result], think again. I'm going to teach you how in as little as [X time], just like my client did.",
+"After working with over [number] clients solving [X problem], I need you to know this is the #1 thing that is overlooked.",
+"Here's proof that you don't need [X] to get [X result]. (Then share the client who got it.)",
+"For over [X] years I've been helping people [describe expertise].",
+"After [X years] of helping people [solve problem]…",
+"If you were my client and you were having [X problem], this is what I would tell you to do.",
+"My client got [X result] and I'm going to show you exactly how.",
+"This is exactly how I solved [X problem].",
+"This is my go-to strategy for doing [X].",
+"My client got [X result] without doing [the 3 things your audience thinks it takes].",
+"Here's a [niche] tip that completely changed my life. And I hope it does the same for you.",
+"If I had to start all over as [X], this is the first thing I would do.",
+"Okay, I'm gonna tell you how I managed to get [outcome].",
+"I tell all of my clients to [X] if they want [X].",
+"How I achieved [X] by stopping [X].",
+"I'm [your name] and I wanna talk about…",
+"Something I do every [day / week / month] that helps me [X] is [X].",
+"If I could follow just ONE [niche] rule it would be…",
+"Let's dive into the science of how I get you [X result].",
+"[X] started [X] when… (my clients started making sales from their reels when…)",
+];
+const PEDERSEN = [
+"The best [technique] I've ever done.",
+"10 [tool types] I wish I knew earlier.",
+"You need this free tool for [vehicle].",
+"I wish I knew about this [vehicle] tip sooner.",
+"Top 5 sites I use to save time as a [niche].",
+"Nobody is talking about this [vehicle] strategy.",
+"This is why your [vehicle] isn't working.",
+"There's one tiny hack that creates exponential results.",
+"4 free sites to create great [tool types].",
+"Simple way to do [vehicle] for free.",
+"Want to know how to do the [technique]?",
+"How to grow your [vehicle] organically.",
+"5 things you can do right now to improve [vehicle].",
+"This is your sign to start taking your [vehicle] seriously.",
+"How to grow your [vehicle].",
+"Here are 10 ideas you can use for [vehicle].",
+"I just found the best [technique] hack.",
+"[Vehicle] hack that you didn't know about.",
+"I decided to take my [vehicle] seriously 2 months ago.",
+"3 apps every [niche] uses.",
+];
+const AMANDA_VERBAL = [
+"[Rising sign / type / role], this one's for you: [the thing you see in them].",
+"If you're a [callout] with a big audience and an income that stopped growing with it, this is exactly why.",
+"We're the world's top neurosurgeons for everybody else. [Then: and blind on ourselves.]",
+"Your lack of [clarity / consistency / sales] is not the problem. It's a symptom.",
+"Them: [what everyone says you need]. Me: [what you actually did].",
+"You can be deeply spiritual and want 10K months. That IS spiritual.",
+"Can we talk about how you cannot out-post a bad offer?",
+"Four leaks I find in almost every spiritual business.",
+"Two [readers], same gift, one stays at a plateau, one books every call. One difference.",
+"Here's what actually happens on a [your offer], start to finish.",
+"This is what I do before a [your offer] even starts.",
+"She had [the thing they think they need] and literally could not see her own business anymore.",
+"Everyone calculates the cost of saying yes. Nobody calculates the cost of staying.",
+"I don't believe in scripts. I believe in frameworks.",
+"If you've got the pieces but not the structure, here's the one thing I'd do next.",
+];
+S.push({tab:'verbal', title:'Verbal hooks · <em>say this first</em>', lead:'The first sentence out of your mouth. Pick a pattern, say it in your words, never the same pattern two days in a row.', src:'Amanda\'s Fire Your Boss hook list (75), Rachel Pedersen\'s 20 (from 937 viral info TikToks), and the hooks from Amanda\'s own audit plan.', lists:[
+ ['Amanda\'s own, from the audit plan', AMANDA_VERBAL],
+ ['Educational (25)', FYB_EDU],
+ ['Storytelling, relatable, inspirational (29)', FYB_STORY],
+ ['Authority (21)', FYB_AUTH],
+ ['Rachel Pedersen\'s 20 viral info hooks', PEDERSEN],
+]});
+
+// ---------- RE-HOOKS ----------
+const REHOOKS = [
+"…just kidding, I'm not done, because the thing nobody tells you about [topic] is…",
+"…yes, I know it sounds crazy, but my best month came after I stopped posting every day…",
+"…and you know what else kills a spiritual offer? Calling it a 'container'…",
+"…and don't get me wrong, manifestation works, but it won't write your sales page…",
+"…speaking of Mercury retrograde, did you hear what happened to my launch numbers?",
+"…but the thing that actually scaled my community surprised me…",
+"…and this is where most healers get pricing completely backwards…",
+"…so if you've been wondering why people join your community and then go quiet, this might be it.",
+"…and that is why I'll never run a free challenge without a paid next step again…",
+"…and if you've been posting for months and your income hasn't moved, I want you to hear this.",
+];
+const REHOOK_PATTERNS = [
+"…and yes, this applies to you even if you're [the best in your field]. Especially if…",
+"…and no, I'm not going to [the thing they expect]…",
+"…and I know some of you just flinched when I said [the trigger word]. Stay with me…",
+"…and this is the part that's going to sting a little, [callout]…",
+"…and the part nobody expects is [what happens at the end]…",
+"…and before you say it's a [discipline / mindset] problem: it's not. It's a [structure] problem…",
+"…and I say this as a recovering [course junkie / people pleaser / over-giver]…",
+"…and she had every single piece. That's what made it so frustrating…",
+"…and nobody ever does this math, which is exactly why they stay…",
+"…and I know, because I watched someone with [a million subscribers] almost do it…",
+"…and an actual [clarity coach] said this to me on a call, word for word…",
+"…and before you come for me: I'm a [callout]. I've done it too…",
+];
+S.push({tab:'rehook', title:'Mid-sentence <em>re-hooks</em>', lead:'Say one of these 3 to 5 seconds in, without pausing, as if you forgot to finish the thought. The ones that land best on talk-to-camera are 2, 7 and 10: they pair a pattern with a confession.', src:'Amanda\'s ten, then the patterns built from them.', lists:[
+ ['Amanda\'s ten', REHOOKS],
+ ['Patterns to build your own', REHOOK_PATTERNS],
+]});
+
+// ---------- TITLE HOOKS ----------
+const TITLE_RULES_HTML = `
+<div class="rule"><b>1</b><div>Under 5 words. Short and simple.</div></div>
+<div class="rule"><b>2</b><div>One word in CAPS. The keyword, not the whole line.</div></div>
+<div class="rule"><b>3</b><div>Say something DIFFERENT out loud than what the title says. If the title is "4 leaks in your business", the first words out of your mouth are not "here are four leaks".</div></div>
+<div class="rule"><b>4</b><div>Top or middle of the frame. The caption covers the bottom.</div></div>
+<div class="rule"><b>5</b><div>Emojis and dates help. "Do this before 11/11" outperforms "Do this".</div></div>`;
+const TITLE_SPIRIT = [
+"Manifest Wealth INSTANTLY","Your Energy = Your Bank","Reprogram Your Mind FAST","Signs Money Is Coming","Magnetic Woman ENERGY","Advice from a heart-led multi-millionaire","This BLOCKS Your Manifestation","Speak This = More Money","Money Loves This Energy","What You Focus On GROWS","Shift Your Vibe Fast","This Attracts DREAM Clients","Stop Doing This Now","Upgrade Your Mindset FAST","Let Go = Receive More","This Changes EVERYTHING","Manifest Faster With This",
+"Overcome Self-Doubt in 3 Steps","Mindset Shifts for SUCCESS","Break Free from Limiting Beliefs","Unlock Your Full Potential",
+"Connect with Your Higher Self","Understanding Your Spirit Guides","Embrace Your Spiritual Awakening","Full Moon Rituals for Releasing",
+"Stop Doing THIS to Your Business","The Real Reason Your Offer Isn't Selling","Your Pricing Is RUINING Your Upgrades","The Secret Nobody Talks About","I Stopped Doing THIS & Everything Changed",
+];
+const TITLE_AMANDA = [
+"[Callout] ♎️ with the gift but no SYSTEM","Why [callout] can't fix their OWN business","Clarity is a SYMPTOM","Audit prep nobody SEES","No team. Just STRUCTURE 🇪🇸","Money is SPIRITUAL","Power you can't SEE","You can't out-post THIS","4 LEAKS in your business","Why members LEAVE","Inside a 60-min AUDIT","Starting at ZERO again?","Same gift. Totally different INCOME.","Followers ≠ income","Stop selling by the HOUR","You don't need another COURSE","She had the PIECES","Why nobody UPGRADES","Paid to EXIST ♎️","Winging it isn't INTUITION","The cost of STAYING","It wasn't HUSTLE","A new niche won't SAVE you","I find it BEFORE we talk","Scripts vs FRAMEWORKS","Big audience, totally STUCK","Buy the lamp. Raise the price.","Low views, HIGH sales","Pieces, no STRUCTURE",
+];
+const TITLE_FORMULAS = [
+"[Callout] [emoji] + the gap: 'Libra Rising ♎️ the missing piece'",
+"[Thing] is a SYMPTOM / isn't [what they think]: 'Clarity is a SYMPTOM', 'Winging it isn't INTUITION'",
+"Why [who] [bad outcome]: 'Why nobody UPGRADES', 'Why members LEAVE'",
+"[X] ≠ [Y] / [X] vs [Y]: 'Followers ≠ income', 'Scripts vs FRAMEWORKS'",
+"Stop [thing] / Stop [thing] NOW: 'Stop selling by the HOUR'",
+"Number + noun: '4 LEAKS in your business', '3 moves, 90 days'",
+"Inside / BTS: 'Inside a 60-min AUDIT', 'Audit prep nobody SEES'",
+"The cost of [inaction]: 'The cost of STAYING', 'One more year of this?'",
+"It wasn't [what they assume]: 'It wasn't HUSTLE'",
+"Contrast on one line: 'Big audience, totally STUCK', 'Low views, HIGH sales'",
+"Two short sentences: 'Buy the lamp. Raise the price.'",
+"Same [X]. Different [Y].: 'Same gift. Totally different INCOME.'",
+];
+S.push({tab:'title', title:'Title hooks · <em>text on screen</em>', lead:'The words on the video. Short, one CAPS word, and a different sentence from what you say first.', src:'Rules and spiritual examples from the viral title hooks swipe file; the rest from Amanda\'s audit plan.', html:TITLE_RULES_HTML, lists:[
+ ['Formulas that work for spiritual business', TITLE_FORMULAS],
+ ['From Amanda\'s plan (swap the callout and the noun)', TITLE_AMANDA],
+ ['Manifestation, mindset, spiritual (swipe file)', TITLE_SPIRIT],
+], titleList:true});
+
+// ---------- YOUTUBE TITLES ----------
+const YT = [
+ ['Outcome-based (desire)', [
+ "How to [achieve outcome] without [undesirable thing]",
+ "[Search term]: The [method] That Actually Works",
+ "How I [achieved result] in [timeframe] (and How You Can Too)",
+ "The Laziest Way to [achieve outcome] as a [niche role]",
+ "[Search term]: My Exact [number]-Step Method",
+ "From [starting point] to [result] Using [specific method]",
+ "What [dream outcome] Actually Looks Like for [niche role]",
+ "Give Me [short timeframe] and I Will Make Your [thing] [percentage] Better",
+ ]],
+ ['Contrarian / pattern interrupt (curiosity + fear)', [
+ "Stop [common advice]. Do This Instead for [outcome]",
+ "Why [common belief] Is Keeping You [stuck / overwhelmed]",
+ "[Niche thing] Is Not Hard. You Are Just Doing It Wrong.",
+ "I Quit [expected thing] and [unexpected result] Happened",
+ "[Common advice] Is BS (for [specific audience])",
+ "You Do Not [x]. You Want [y].",
+ "Why [unexpected thing] Is Not Enough",
+ ]],
+ ['Timeframe / speed (desire + curiosity)', [
+ "[Search term] in [short timeframe] (Step by Step)",
+ "[Number] Minutes of No-BS [Niche] Advice",
+ "How to [outcome] in [timeframe] Even If You Are Starting from Zero",
+ "Give Me [timeframe] and You Will Never [bad thing] Again",
+ "I [bold action] for [timeframe]. This Is What Happened.",
+ ]],
+ ['Authority / proof (desire + curiosity)', [
+ "How [authority type] [achieve result] (and You Can Copy Them)",
+ "I [did massive thing]. Here Is What Actually Works.",
+ "[Number] Things [successful people] Do That You Do Not",
+ "I Helped [number] [clients] [achieve result]. Here Is the Pattern.",
+ "I Studied [number] [niche thing]. This Is What Will [achieve result].",
+ ]],
+ ['Secrets / insider (curiosity)', [
+ "[Search term]: [Number] Secrets That Feel Like Cheating",
+ "What Nobody Tells You About [niche thing]",
+ "The [method] That Gives You an Unfair Advantage in [niche]",
+ "The [niche] Strategy Nobody Is Talking About",
+ ]],
+ ['Mistakes / avoidance (fear)', [
+ "[Number] [Niche] Mistakes That Are Costing You [clients / money / time]",
+ "Do Not [do thing] Until You Watch This",
+ "Why You Are Not Getting [desired result] (It Is Not What You Think)",
+ "This ONE Mistake Is Killing Your [niche thing]",
+ "[Number] [Good] Habits That Are Actually Keeping You [stuck]",
+ ]],
+ ['Transformation / journey (desire + curiosity)', [
+ "I Tried [new approach] for [timeframe]. Here Is What Happened.",
+ "From [undesirable state] to [desirable state] Using [method]",
+ "I Changed ONE Thing and [dramatic result]",
+ "How I Went from [starting point] to [current result]",
+ "So You Have [taken action]. Here Is How to [continue].",
+ ]],
+ ['Curiosity gap / open loop (curiosity)', [
+ "This Is All It Takes to [achieve outcome]",
+ "The [niche] Advice That Rewired My Brain",
+ "I Was Wrong About [thing]. Here Is What I Learned.",
+ "The Ugly Truth About [niche thing] Nobody Wants to Hear",
+ "This [simple thing] Will [transform outcome] (Most [niche people] Miss It)",
+ ]],
+ ['Creator Hooks top performers (highest hook scores)', [
+ "I tested [X] vs [Y]. Here's what won.",
+ "Getting [addicted to / obsessed with] [X] is easy. (contradiction)",
+ "How to [achieve goal] without [unwanted action]",
+ "NEVER say this [on a sales call / in a DM]…",
+ "What happens to [X] that never [Y]?",
+ "Is there a difference between [X] and [Y]?",
+ "The REALITY of [polarizing thing] in [current year]",
+ "5 [X] habits that [Y]",
+ "I went to all [X]. Here are my rankings.",
+ "From [screw-up] to [legend]: [the turning point]",
+ ]],
+];
+const YT_RULES = `
+<div class="rule"><b>1</b><div>Front-load the search keyword in the first 3 to 5 words.</div></div>
+<div class="rule"><b>2</b><div>7 to 11 words, under 55 characters. Mobile truncates after that, and 70% of views are mobile.</div></div>
+<div class="rule"><b>3</b><div>Use the exact phrase they'd type at 11pm when they're stuck.</div></div>
+<div class="rule"><b>4</b><div>One power word per title. Capitalise at most one word.</div></div>
+<div class="rule"><b>5</b><div>A bracket adds a second promise: (Step by Step), (Without Burnout), (For Readers).</div></div>
+<div class="rule"><b>6</b><div>Label each title Search (they typed it) or Browse (they scrolled into it). Make some of each.</div></div>
+<div class="rule"><b>7</b><div>No year unless it's genuinely time-sensitive. Evergreen compounds. No clickbait, no em dashes, no salesy words.</div></div>
+<h3>Title + thumbnail never say the same thing</h3>
+<div class="pair"><div class="bad"><small>Repeats</small>Title: "Five pricing myths" · Thumb: "Five pricing myths"</div><div class="good"><small>Complements</small>Title: "Five pricing myths" · Thumb: "You're doing it wrong"</div></div>
+<p class="ex">Title asks, thumbnail hints. Title promises, thumbnail adds urgency ("before it's too late"). Title states the problem, thumbnail shows the feeling. Amanda's thumbnail formula: 2 to 4 CAPS words, one icon, her face, dark background.</p>`;
+S.push({tab:'yt', title:'YouTube title <em>frameworks</em>', lead:'For long-form. Match the video to the framework that amplifies it, generate ten, keep the strongest three, then pair each with a thumbnail that says something else.', src:'The viral-youtube-titles formula library, Creator Hooks (Jake Thomas) frameworks ranked by hook score, Andrew Muto\'s universalise / dial-to-11 / McDonald\'s test.', html:YT_RULES, lists:YT});
+
+// ---------- CTA + CAPTION ----------
+S.push({tab:'cta', title:'CTA and <em>caption</em>', lead:'One verbal CTA per video. Name the thing, say where it is. The caption repeats what you just promised, then adds the keyword.', src:'How Amanda\'s own 30-day audit plan is built.', html:`
+<h3>Verbal CTA · one ask, names the thing</h3>
+<ul class="hooks">
+<li>"I broke the whole thing down in my [free thing]. It's free, grab it below."</li>
+<li>"If you're [who the offer is for], the [offer name] details are below."</li>
+<li>"If you want me to find yours, the details are below."</li>
+<li>"So if you're an expert with [5,000 plus followers] and proven client results, comment [KEYWORD] when you want to understand the number one thing blocking you from your next level, and your next three moves for the next 90 days."</li>
+</ul>
+<p class="ex">Pick one. Two spoken CTAs split the viewer at the exact second they should be deciding. The outline's last bullet has to set the CTA up so it's the natural next sentence, not a bolt-on.</p>
+<h3>The caption · four parts, nothing else</h3>
+<div class="cap"><b>Comment [KEYWORD] when you're ready to [the outcome THIS video promised] 🔮</b>
+
+[Your story in two or three sentences. Where you were, where you are now, who you work with. Lead with the contrast, not the income. Same lines every day.]
+
+<b>[One line about this video's point]: comment [GIFT WORD] for [the free thing] where I break the whole thing down.</b>
+
+[Optional closing line, same every day. Where to find you, or what's happening with your community.]</div>
+<p class="ex">Line 1 connects to what you just said on camera. The gift line carries the video's hook, so the person who isn't ready for the offer still gets the thing the video was about. The offer keyword appears once.</p>
+<h3>Who you're talking to</h3>
+<ul class="hooks">
+<li>Speak to the person at the level they're actually at. If your offer is for people with a platform and first dollars made, never describe them as broke, without clients, or starting from zero. Name the plateau, not the poverty.</li>
+<li>Allowed: income that stopped growing, the same handful of bookings, flat income, stuck at a plateau, scale past where you are, no recurring revenue, burned out on 1:1, ready to leave the job.</li>
+<li>No income claim as the hook. No urgency you can't back up. "Limited availability", never a number of spots.</li>
+</ul>
+`});
+
+// ---------- RENDER ----------
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function render(){
+  const main=document.getElementById('main'); let h='';
+  for(const sec of S){
+    h+=`<section class="sec grid" data-tab="${sec.tab}"><h2>${sec.title}</h2><p class="lead">${sec.lead}</p>${sec.src?`<p class="src">Source: ${sec.src}</p>`:''}${sec.html||''}`;
+    if(sec.lists){ for(const [name,items] of sec.lists){ h+=`<h3>${esc(name)}</h3><ul class="hooks${sec.titleList?' title':''}">${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`; } }
+    h+=`</section>`;
+  }
+  main.innerHTML=h; applyFilter();
+}
+let tab='all', q='';
+function applyFilter(){
+  const ql=q.trim().toLowerCase(); let shown=0;
+  document.querySelectorAll('section.sec').forEach(sec=>{
+    const tabOk = tab==='all' || sec.dataset.tab===tab;
+    let any=false;
+    sec.querySelectorAll('ul.hooks li').forEach(li=>{ const ok=!ql || li.textContent.toLowerCase().includes(ql); li.classList.toggle('hide',!ok); if(ok){any=true; shown++;} });
+    const hasRules = sec.querySelector('.rule') && !ql;
+    sec.classList.toggle('hide', !tabOk || (!any && !hasRules));
+  });
+  document.getElementById('count').textContent = ql ? `${shown} lines match "${q}"` : '';
+}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1200);}
+document.addEventListener('click', async e=>{
+  const li=e.target.closest('ul.hooks li'); if(li){ const txt=li.textContent; try{ await navigator.clipboard.writeText(txt);}catch(_){ const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(__){}ta.remove(); } li.classList.add('ok'); setTimeout(()=>li.classList.remove('ok'),1200); toast('Copied'); return; }
+  const t=e.target.closest('.tab'); if(t){ tab=t.dataset.tab; document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t)); applyFilter(); window.scrollTo({top:0,behavior:'smooth'}); }
+});
+document.getElementById('q').addEventListener('input', e=>{ q=e.target.value; applyFilter(); });
+render();
+</script>
+</body>
+</html>
