@@ -80,7 +80,7 @@ ul.hooks li b{color:var(--gold);font-weight:600}
 
 <main id="main"></main>
 
-<p class="foot">Built from Amanda's Fire Your Boss hook list, Rachel Pedersen's 20 viral TikTok hooks, the Creator Hooks and Andrew Muto title frameworks, and the viral title hooks swipe file.<br>Patterns, not scripts. There's no one right way, there's only your way and consistency.</p>
+<p class="foot">Built from Amanda's Fire Your Boss hook list, Rachel Pedersen's 20 viral TikTok hooks, Shannon McKinstrie's mid-sentence and "first 5" reels, the Creator Hooks and Andrew Muto title frameworks, and the viral title hooks swipe file.<br>Patterns, not scripts. There's no one right way, there's only your way and consistency.</p>
 <div class="toast" id="toast">Copied</div>
 
 <script>
@@ -243,44 +243,43 @@ const AMANDA_VERBAL = [
 "I don't believe in scripts. I believe in frameworks.",
 "If you've got the pieces but not the structure, here's the one thing I'd do next.",
 ];
-S.push({tab:'verbal', title:'Verbal hooks · <em>say this first</em>', lead:'The first sentence out of your mouth. Pick a pattern, say it in your words, never the same pattern two days in a row.', src:'Amanda\'s Fire Your Boss hook list (75), Rachel Pedersen\'s 20 (from 937 viral info TikToks), and the hooks from Amanda\'s own audit plan.', lists:[
+const FIRST5 = [
+"The first 5 things I'd [do / change / teach] if you [situation]",
+"The first 5 things I'd change in your builder-grade kitchen if you'd let me",
+"The first 5 Sephora products I'd add to your cart if you only have five minutes to get ready",
+"The 5 lunches I'd add to your weekly rotation if you wanted to lose 15 lbs by Thanksgiving",
+"The first five neighborhoods in Raleigh I'd take you if you were thinking of relocating here",
+"The first five things I'd teach you if you were brand-new to golf",
+"The first 5 things I'd teach your dog if you just brought home a new puppy",
+"The first 5 things I'd have you try from our fall menu if you love sweet treats",
+"The first five books I'd recommend to your tween if they say they hate reading",
+"The first 5 things I'd take off your plate if you hired me as your VA",
+"The first five investments I'd have you make if you were starting with $500",
+];
+S.push({tab:'verbal', title:'Verbal hooks · <em>say this first</em>', lead:'The first sentence out of your mouth. Pick a pattern, say it in your words, never the same pattern two days in a row.', src:'Amanda\'s Fire Your Boss hook list (75), Rachel Pedersen\'s 20 (from 937 viral info TikToks), the hooks from Amanda\'s own audit plan, and Shannon McKinstrie\'s "first 5" reel.', lists:[
  ['Amanda\'s own, from the audit plan', AMANDA_VERBAL],
  ['Educational (25)', FYB_EDU],
  ['Storytelling, relatable, inspirational (29)', FYB_STORY],
  ['Authority (21)', FYB_AUTH],
  ['Rachel Pedersen\'s 20 viral info hooks', PEDERSEN],
+ ['The "first 5" format · Shannon McKinstrie\'s examples, as written', FIRST5],
 ]});
 
 // ---------- RE-HOOKS ----------
 const REHOOKS = [
-"…just kidding, I'm not done, because the thing nobody tells you about [topic] is…",
-"…yes, I know it sounds crazy, but my best month came after I stopped posting every day…",
-"…and you know what else kills a spiritual offer? Calling it a 'container'…",
-"…and don't get me wrong, manifestation works, but it won't write your sales page…",
-"…speaking of Mercury retrograde, did you hear what happened to my launch numbers?",
-"…but the thing that actually scaled my community surprised me…",
-"…and this is where most healers get pricing completely backwards…",
-"…so if you've been wondering why people join your community and then go quiet, this might be it.",
-"…and that is why I'll never run a free challenge without a paid next step again…",
-"…and if you've been posting for months and your income hasn't moved, I want you to hear this.",
+"…just kidding, I'm not done because the thing is…",
+"…yes I know it sounds crazy but…",
+"…and you know what else?",
+"…and don't get me wrong because…",
+"…speaking of ___ did you hear about ___?",
+"…but the thing that actually made the difference surprised me…",
+"…and this is where most people get [topic] completely backwards…",
+"…so if you've been wondering why [problem] keeps happening, this might be it.",
+"…and that is why I'll never ___ again…",
+"…and if you've been ___ [name situation they're in], I want you to hear this.",
 ];
-const REHOOK_PATTERNS = [
-"…and yes, this applies to you even if you're [the best in your field]. Especially if…",
-"…and no, I'm not going to [the thing they expect]…",
-"…and I know some of you just flinched when I said [the trigger word]. Stay with me…",
-"…and this is the part that's going to sting a little, [callout]…",
-"…and the part nobody expects is [what happens at the end]…",
-"…and before you say it's a [discipline / mindset] problem: it's not. It's a [structure] problem…",
-"…and I say this as a recovering [course junkie / people pleaser / over-giver]…",
-"…and she had every single piece. That's what made it so frustrating…",
-"…and nobody ever does this math, which is exactly why they stay…",
-"…and I know, because I watched someone with [a million subscribers] almost do it…",
-"…and an actual [clarity coach] said this to me on a call, word for word…",
-"…and before you come for me: I'm a [callout]. I've done it too…",
-];
-S.push({tab:'rehook', title:'Mid-sentence <em>re-hooks</em>', lead:'Say one of these 3 to 5 seconds in, without pausing, as if you forgot to finish the thought. The ones that land best on talk-to-camera are 2, 7 and 10: they pair a pattern with a confession.', src:'Amanda\'s ten, then the patterns built from them.', lists:[
- ['Amanda\'s ten', REHOOKS],
- ['Patterns to build your own', REHOOK_PATTERNS],
+S.push({tab:'rehook', title:'Mid-sentence <em>re-hooks</em>', lead:'Say one of these 3 to 5 seconds in, without pausing, as if you forgot to finish the thought. These are the formats as written. Fill the blanks with that day\'s topic in your own words.', src:'Shannon McKinstrie\'s "10 mid-sentence hooks to start your talk-to-camera videos" (Instagram reel), word for word.', lists:[
+ ['The ten formats', REHOOKS],
 ]});
 
 // ---------- TITLE HOOKS ----------
