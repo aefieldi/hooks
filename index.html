@@ -12,10 +12,8 @@
 :root{--bg:#0b0a12;--card:#13111d;--line:rgba(183,156,245,.16);--text:#fff;--muted:rgba(255,255,255,.62);--dim:rgba(255,255,255,.4);--lav:#b79cf5;--violet:#7c5cf0;--mint:#7fe0b8;--gold:#e8c878;--r:18px;--pad:16px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Outfit',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 var(--pad) 60px;max-width:760px;margin:0 auto}
+body{margin:0 auto;background:var(--bg);color:var(--text);font-family:'Outfit',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 var(--pad) 60px;max-width:760px}
 .grid{background-color:var(--card);background-image:linear-gradient(rgba(183,156,245,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(183,156,245,.045) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:var(--r)}
-.serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
-.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lav);font-weight:600}
 header{padding:calc(24px + env(safe-area-inset-top)) 0 8px}
 header .who{font-size:13px;color:var(--muted);margin:0 0 4px}
 header h1{font-size:30px;line-height:1.1;margin:0;font-weight:600;letter-spacing:-.01em}
@@ -32,8 +30,9 @@ header p.sub{color:var(--muted);font-size:14.5px;margin:10px 0 0}
 .sec h2{font-size:22px;margin:4px 0 2px;font-weight:600;line-height:1.2}
 .sec h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--gold)}
 .sec .lead{color:var(--muted);font-size:14px;margin:0 0 10px}
-.sec .src{font-size:11.5px;color:var(--dim);margin:0 0 10px}
 h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--lav);margin:16px 0 6px;font-weight:600}
+.use{font-size:13.5px;color:var(--muted);margin:-2px 0 8px}
+.use b{color:var(--mint);font-weight:600}
 ul.hooks{list-style:none;margin:0;padding:0}
 ul.hooks li{position:relative;padding:9px 40px 9px 12px;margin:0 0 6px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:14.5px;line-height:1.4;cursor:pointer;color:rgba(255,255,255,.9)}
 ul.hooks li.hide{display:none}
@@ -49,19 +48,18 @@ ul.hooks li b{color:var(--gold);font-weight:600}
 .pair div{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:13.5px}
 .pair div small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
 .pair .bad{border-color:rgba(255,120,120,.35)} .pair .good{border-color:rgba(127,224,184,.4)}
-.cap{white-space:pre-wrap;font-size:14px;line-height:1.5;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:12px;padding:12px;color:rgba(255,255,255,.9)}
-.cap b{color:#fff}
 .foot{text-align:center;color:var(--dim);font-size:12px;margin:26px 0 0;line-height:1.6}
 .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:24px;background:#fff;color:#0b0a12;font-weight:600;font-size:13px;padding:9px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:all .25s;z-index:20}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .count{font-size:12px;color:var(--dim);margin:4px 2px 0}
+@media (max-width:480px){.pair{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
   <p class="who">Spiritual Business Skool · Amanda Fielding-Smith</p>
   <h1>The <em>Hook</em> Library</h1>
-  <p class="sub">Every verbal hook, re-hook, title hook and YouTube title formula we build content plans from. Tap any line to copy it. Swap the brackets for your topic.</p>
+  <p class="sub">486 hooks, sorted by the job they do: the text on screen, the first sentence you say, the mid-sentence re-hook. Tap any line to copy it. Keep the wording, fill the brackets with your topic.</p>
 </header>
 
 <div class="search">
@@ -72,116 +70,189 @@ ul.hooks li b{color:var(--gold);font-weight:600}
     <button class="tab" data-tab="verbal">Verbal hooks</button>
     <button class="tab" data-tab="rehook">Re-hooks</button>
     <button class="tab" data-tab="title">Title hooks</button>
-    <button class="tab" data-tab="yt">YouTube titles</button>
-    <button class="tab" data-tab="cta">CTA + caption</button>
+    <button class="tab" data-tab="fw">Title frameworks</button>
   </div>
   <div class="count" id="count"></div>
 </div>
 
 <main id="main"></main>
 
-<p class="foot">Built from Amanda's Fire Your Boss hook list, Rachel Pedersen's 20 viral TikTok hooks, Shannon McKinstrie's mid-sentence and "first 5" reels, the Creator Hooks and Andrew Muto title frameworks, and the viral title hooks swipe file.<br>Patterns, not scripts. There's no one right way, there's only your way and consistency.</p>
+<p class="foot">Patterns, not scripts. There's no one right way, there's only your way and consistency.</p>
 <div class="toast" id="toast">Copied</div>
 
 <script>
 const S = [];
-
-// ---------- HOW HOOKS WORK ----------
-S.push({tab:'rules', title:'How a hook <em>works</em>', lead:'Five rules that sit under every list on this page.', src:'', html:`
-<div class="rule"><b>1</b><div><strong>Say something different from what's on screen.</strong> The title hook is the text, the verbal hook is the first sentence out of your mouth. If they match, the viewer reads it, hears it, and leaves. Eye and ear each get a reason to stay.</div></div>
-<div class="rule"><b>2</b><div><strong>Title hook: under 5 words, one word in CAPS, an emoji if it fits.</strong> Top or middle of the frame so the caption doesn't cover it. Capitalising the keyword works. Dates and numbers create urgency.</div></div>
-<div class="rule"><b>3</b><div><strong>Re-hook at 3 to 5 seconds, without pausing.</strong> Mid-sentence, as if you forgot to finish the thought. It re-earns the attention the hook bought.</div></div>
-<div class="rule"><b>4</b><div><strong>Every hook triggers one of three feelings.</strong> Curiosity (I need to know), fear (I don't want to get this wrong), desire (I want that). The best ones hit two.</div></div>
-<div class="rule"><b>5</b><div><strong>The McDonald's test.</strong> Someone who works at McDonald's should understand your hook instantly. No jargon, no setup, no "in this video I'm going to".</div></div>
-<h3>The ten principles behind every framework</h3>
-<ul class="hooks">
-<li><b>Curiosity</b> · an open loop they need closed ("what happens to…", "do X really…")</li>
-<li><b>Desire</b> · what they want: clients, money, freedom, being seen</li>
-<li><b>Negativity</b> · warnings and problems grab faster than benefits</li>
-<li><b>Controversy</b> · a counterintuitive or polarising take</li>
-<li><b>Authority</b> · a name, a credential, a number of clients</li>
-<li><b>Specificity</b> · numbers, timeframes, exact examples feel real</li>
-<li><b>Lists</b> · "4 leaks", "5 signs", "3 moves" feel scannable</li>
-<li><b>Constraint</b> · "the ONE thing", "this ONE mistake"</li>
-<li><b>Contrast</b> · "not X, but Y", "same gift, different income"</li>
-<li><b>Speed / ease</b> · "in 30 minutes", "in one sitting", "without posting daily"</li>
-</ul>
-<h3>Dial it to 11, then pull back one notch</h3>
-<ul class="hooks">
-<li>Start: "Your tiers are priced wrong"</li>
-<li>Up: "Why nobody upgrades in your community"</li>
-<li>Up: "The #1 reason nobody upgrades"</li>
-<li>Up: "This pricing mistake is killing your upgrades"</li>
-<li>Too far: "Your pricing is a crime scene" → pull back one</li>
-</ul>
-<h3>Universalise, or narrow on purpose</h3>
-<div class="pair"><div class="bad"><small>Filters the audience</small>"Five pricing myths every astrologer believes"</div><div class="good"><small>Universal</small>"Five pricing myths"</div></div>
-<p class="ex">Every word after the hook is a filter. Narrow only when the callout IS the strategy: "Libra Rising" and "Projectors" narrow on purpose, because the right person self-identifies hard.</p>
-`});
-
-// ---------- VERBAL HOOKS ----------
-const FYB_EDU = [
-"Let me show you my favorite way to [X].",
-"If I had just [limited] minutes every day to work towards [core desire], here's exactly what I'd do.",
-"Here is a beginner-friendly way to [achieve core desire].",
-"Here are more creative ways for you to [achieve core desire].",
-"Things I had to unlearn in order to [achieve result].",
-"It's time to start talking about something a lot of you don't want to talk about, and that's [X].",
-"The mindset behind a successful [niche role] vs. an unsuccessful one comes down to this…",
-"If you are currently in the process of [niche journey], listen up, this video is for you.",
-"Give me 1 minute and I'll show you how to [X].",
-"5 [niche] hacks.",
-"The biggest missing link with your [niche journey] is…",
-"Is [strategy] a viable way to achieve [goal]? Let's talk about it.",
-"3 [niche] strategies.",
-"Here are 4 ways that you can [achieve X].",
-"In case you didn't know, [shocking niche fact].",
-"This is probably why you're unable to [X]…",
-"One of the most important things to remember in regards to [niche] is…",
-"Here is what to do if you [confusing scenario your audience runs into].",
-"Ok, hear me out. [Uncommon or new strategy in your niche.]",
-"Without these 3 things, I probably would've never been able to [achieve audience desire].",
-"Here's exactly what I'd do if I wanted to [achieve specific result].",
-"If I wanted to achieve [desired result] in 1 month, here's what I would do.",
-"I'm going to give you the simplest way to achieve [result].",
-"If you do X things, you'll have Y result by Z time frame.",
-"If you want [specific desire], do these few things.",
-"[X] started [X] when… (my clients started booking from their reels when…)",
-];
-const FYB_STORY = [
-"Imagine having [X result] and now you get to [X]. Here's how.",
-"So I don't think enough people know that you can actually get [X result] without doing [X].",
-"I dare you to imagine what life would be like when [X] happens. Okay, now let me show you how easy it can be.",
-"Your future [bank account / calendar / community] will thank you if you start doing this.",
-"Here's what no one else is going to tell you about [niche].",
+S.push({tab:'rules', title:'How a hook <em>works</em>', lead:'Five rules that sit under every list on this page.', html:"<div class=\"rule\"><b>1</b><div><strong>Say something different from what&#x27;s on screen.</strong> The title hook is the text, the verbal hook is the first sentence out of your mouth. If they match, the viewer reads it, hears it, and leaves. Eye and ear each get a reason to stay.</div></div><div class=\"rule\"><b>2</b><div><strong>Title hook: under 5 words, one word in CAPS, an emoji if it fits.</strong> Top or middle of the frame so the caption doesn&#x27;t cover it. Dates and numbers create urgency.</div></div><div class=\"rule\"><b>3</b><div><strong>Re-hook at 3 to 5 seconds, without pausing.</strong> Mid-sentence, as if you forgot to finish the thought. It re-earns the attention the hook bought and runs straight into the first beat.</div></div><div class=\"rule\"><b>4</b><div><strong>Every hook triggers one of three feelings.</strong> Curiosity (I need to know), fear (I don&#x27;t want to get this wrong), desire (I want that). The best ones hit two.</div></div><div class=\"rule\"><b>5</b><div><strong>Pass the stranger test.</strong> Someone with no idea what you do should understand the hook instantly. No jargon, no setup, no &quot;in this video I&#x27;m going to&quot;.</div></div><h3>Pairing</h3><p class=\"ex\">Pick the verbal hook from the group that matches the video. Pick the title hook from a different angle, so the eye and the ear get two reasons to stay. The caption is the third angle: the point from the viewer&#x27;s side, never the hook again.</p><h3>The ten principles behind every hook</h3><ul class=\"hooks\"><li><b>Curiosity</b> · an open loop they need closed (&quot;what happens to…&quot;, &quot;do X really…&quot;)</li><li><b>Desire</b> · what they want: clients, money, freedom, being seen</li><li><b>Negativity</b> · warnings and problems grab faster than benefits</li><li><b>Controversy</b> · a counterintuitive or polarising take</li><li><b>Authority</b> · a name, a credential, a number of clients</li><li><b>Specificity</b> · numbers, timeframes, exact examples feel real</li><li><b>Lists</b> · &quot;4 leaks&quot;, &quot;5 signs&quot;, &quot;3 moves&quot; feel scannable</li><li><b>Constraint</b> · &quot;the ONE thing&quot;, &quot;this ONE mistake&quot;</li><li><b>Contrast</b> · &quot;not X, but Y&quot;, &quot;same gift, different income&quot;</li><li><b>Speed / ease</b> · &quot;in 30 minutes&quot;, &quot;in one sitting&quot;, &quot;without posting daily&quot;</li></ul><h3>Dial it to 11, then pull back one notch</h3><ul class=\"hooks\"><li>Start: &quot;Your tiers are priced wrong&quot;</li><li>Up: &quot;Why nobody upgrades in your community&quot;</li><li>Up: &quot;The #1 reason nobody upgrades&quot;</li><li>Up: &quot;This pricing mistake is killing your upgrades&quot;</li><li>Too far: &quot;Your pricing is a crime scene&quot; → pull back one</li></ul><h3>Universalise, or narrow on purpose</h3><div class=\"pair\"><div class=\"bad\"><small>Filters the audience</small>&quot;Five pricing myths every astrologer believes&quot;</div><div class=\"good\"><small>Universal</small>&quot;Five pricing myths&quot;</div></div><p class=\"ex\">Every word after the hook is a filter. Narrow only when the callout IS the strategy: &quot;Libra Rising&quot; and &quot;Projectors&quot; narrow on purpose, because the right person self-identifies hard.</p>"});
+S.push({tab:'verbal', title:'Verbal hooks · <em>say this first</em>', lead:'The first sentence out of your mouth, in six groups. Decide what kind of video it is, then pick from that group. Never the same pattern two days in a row.', lists:[
+ ["Curiosity (91)", "The brain dump has a take people won't expect, a story with a twist, or a rant. The viewer needs to know what happens next.", [
+"So I don't think enough people know...",
+"I dare you to…",
+"Your future [niche descriptor; (skin, etc.)] will thank you if you start doing this today…",
+"Let's be real, [strategy you don't recommend] is not doing you any favors. How about we switch things up?",
+"Here's what no one else is going to tell you about [niche]",
+"Let's switch up your [niche] strategy.",
 "I'm never going to stop talking about…",
-"Can I vent for a second?",
-"They'll tell you that [thing you disagree with] matters. When in reality, it's all about [thing you stand by].",
-"I wish someone had told me [this] before [doing this].",
-"You want to know what… [rant]",
-"Do you ever wonder what it would be like if you had just…",
+"Can I vent for a second??",
+"[Niche topic]. Where do I begin?",
+"If I'm being honest…[rant]",
+"They'll tell you that [something you disagree within your niche] matters. When in reality, it's all about [something you stand by within your niche].",
+"Okay, imagine this…",
+"There's no way I'm going to let you keep [repeating harmful niche cycle].",
+"Frankly, I'm tired of…",
+"you cannot [achieve X], if you're still doing [bad habit Y]",
+"You want to know what…[rant]",
+"Do you ever wonder what it would be like if you had just...",
+"Do you [achieve goal] faster by doing [X] or [Y]?",
+"Fun fact about [niche] is that [fun fact].",
+"So why do we do [X thing]?",
+"If you've ever wondered why [niche phenomenon] happens, let's talk about it. I'm a [your title]…",
+"You're getting [X] all wrong..",
+"You thought [inferior thing] was cool? Wait until you see [superior thing]?",
+"[Niche phenomenon] is not as simple as it seems.",
 "Did you know that you could…",
 "I don't know who needs to hear this but…",
-"So, what is the difference between [X] and [Y]?",
-"The most common misconception when it comes to [niche] is…",
+"So, what is the difference between ______ and ______?",
+"A lot of y'all are going to hate me for this but…",
+"The most common misconception when it comes to [niche] is….",
+"Let's see how fast I can [do something that shows your niche skills]",
 "I don't think you understand the importance of [key niche strategy].",
-"I'm finally starting to realize that [realization]…",
+"I'm finally starting to realize that [realization or awakening]…",
+"I don't think anyone knows how much I [love/hate] X",
+"When I learned how to do this one thing, I [achieved X]",
+"So many people don't realize that they're only a couple months away from…",
+"To everyone who said they were gonna [do X] this year, and then didn't. Just know that [describe audience's dream reality that is happening now].",
+"So I changed my whole damn life in [duration]. I just [describe the changes you made in a simple way].",
+"Unpopular opinion, but…",
+"Do you ever just think about…",
+"Prepare to have your mind's blown with [a new or shocking item].",
+"Hopefully you're seeing this video before [date], because we're about to dive into everything you need to know about [upcoming timely event].",
+"Most people don't realize that…",
+"Do you want the bad news or good news first?",
 "I have a confession to make…",
-"Hate to break it to you but…",
-"Are you interested in learning [X]?",
+"Hate to break it to you but...",
+"Are you interested in learning ______?",
 "What's wrong with [something you disagree with in your industry]? I'll tell you.",
-"I want you to think about this [perspective change].",
-"Why does no one talk about…",
-"[X] won't help you [achieve Y]… instead it will…",
+"I want you to think about this [perspective change]",
+"Please tell me you're not still [doing outdated or harmful thing]?",
+"Why does no one talk about..",
+"There is nothing more irritating (or other word) than...",
+"You need to stop doing [bad habit] as soon as possible.",
+"It irks me so much that...",
+"\"X won't help you [achieve Y]\"…instead it will…",
 "If you've ever wondered how [niche phenomenon] works, let's talk about it. I'm a [your title]…",
+"[Niche phenomenon] is probably different than what you thought it was.",
+"I hate to be the bearer of bad news, but…",
 "Have you ever wondered…",
+"Have you ever wondered why ______ happens? It's because [explanation]. And I'm gonna teach it to you.",
 "More people need to know about…",
-"[X] will always beat out [Y]. (A content strategy will always beat posting and praying.)",
+"_____ will always beat out ______.",
+"If you're into [topic], I….",
+"\"So, you want to start [niche] but you're too caught up in [distraction].\"",
+"I'm just gonna get straight to the point here…",
 "You should not watch this video unless you care about…",
-"Is anyone else annoyed at [harmful myth or belief in your niche]?",
-"Put down whatever you're doing and let this sink in: [mic drop wisdom].",
-];
-const FYB_AUTH = [
+"Is anyone else annoyed at [harmful myth, belief, or thing in your niche]?",
+"Put down whatever you're doing and let this sink in [mic drop wisdom].",
+"I can't stand around and watch you keep on [doing bad habit]…",
+"You don't need [outdated, unhelpful thing]…you need [modern, helpful] thing.",
+"In case you forgot…",
+"I cannot stress enough that [X] is so much more important than [Y] on your [niche] journey.",
+"Have you ever heard of _______?",
+"If you're not [favorite niche tip], what are you doing?",
+"Let's rank some of the worst [niche] advice I've ever heard",
+"Controversial [niche] advice that [produced result]",
+"Everybody I know who is [aspirational result] has this one thing in common. They _______.",
+"Being [niche] is not about [3 myths], here's what it's really about.",
+"This secret has never been shown on TikTok and I'm about to share it with you.",
+"If you've ever looked for a time to take your [niche] journey seriously, this is the time.",
+"I don't care how many views this video gets so long as it reaches the right person.",
+"This is gonna piss a lot of [audience] off, but…",
+"Do not [do X] until you watch this…",
+"Since no one else is gonna say it, I'm gonna say it – [call out your audience / drop a mind-blowing fact].",
+"Don't tell anyone I told you this but [insider info or something that's normally gatekept]…",
+"This might be a crazy theory, but…",
+"I dare you to imagine what life would be like when [X] happens. Okay, now let me show you how easy it can be.",
+"Nobody is talking about this [vehicle] strategy.",
+"This is why your [vehicle] isn't working.",
+"There's one tiny hack that creates exponential results.",
+"I just found the best [technique] hack.",
+"[Vehicle] hack that you didn't know about.",
+]],
+ ["Empathetic (34)", "They're talking to someone stuck in a specific problem. The viewer should feel seen in the first sentence.", [
+"There's no need to [bad habit your audience does]",
+"I hate seeing people stuck in [bad point A position] when getting to [ideal position] is pretty simple.",
+"If you haven't [achieved goal] in [unnecessarily long period of time], watch this video.",
+"I have a PSA for the [audience identity] out there…",
+"If you're stuck in the loop of [common mistake], let's talk about why this doesn't work & what you actually need to do to [reach goal].",
+"I know how it feels to [common niche struggle]. I also know how it feels to [reach desired result].",
+"If you want [desire] but are stuck doing [bad habits], here's what worked for me.",
+"This one's for the [audience identity] who want [desires].",
+"I truly used to feel so [pain point].",
+"Have you ever felt [common audience struggle]? Here's why.",
+"So you're stuck in the ____ cycle again, huh? Let's get you out of there.",
+"There's really no reason to be stuck in [shitty situation]…",
+"You know that you're allowed to feel [feeling], right?",
+"For all the lazy, busy, or unbothered people, I have some [niche] wisdom to share.",
+"If you're [describe ideal audience], keep watching this. If you're a [describe non-ideal audience] keep scrolling.",
+"Instead of you [doing X] why don't you [do Y]?",
+"If you're not using [tool] to [achieve dream], you're [pain point].",
+"If you've been struggling with [common niche pain point], here's what to do from someone who's been there.",
+"Picture this, [describe audience's dream]",
+"Here's how to get out of the [pain point] loop.",
+"You're never going to be a successful [identity keyword] if you don't...",
+"This one's for the [audience identity] who REFUSE TO live in [pain points].",
+"If you constantly find yourself [repeating/doing X], here's something that can help.",
+"[Audience], if you're feeling [pain point], this one's for you.",
+"Ugh, why isn't _____ working? Is _____ even possible? If this sounds like you, hi, I'm a [niche title] and I can help.",
+"This is for someone who's over the whole [common niche myth], but wants to [achieve X]…",
+"The first step to [solving problem] is…",
+"If you want to learn to ______, first you must [change to be made].",
+"I used to feel so [vulnerable emotion] until I…",
+"If you are just like me and you like [relatable, niche interest]…",
+"Here's how I cheated my way to [achieved dream] in just [short timeframe].",
+"So you're in your [age range] and you feel like you're behind with topic…",
+"Here are a few tips for [audience] who are [embarking on X journey] for the first time.",
+"I was able to go from X to Y by switching one thing in my [niche].",
+]],
+ ["Results & authority (54)", "They mention a number, a before and after, a client outcome, or years of doing this. Use these to sell an offer and build authority.", [
+"I see you've already [accomplished X result]. Now lets [go further].",
+"This is the best chance you have to finally [achieve X or overcome Y].",
+"When I realized that [key realization], I was finally able to [achieve desire]…",
+"Here's exactly what I'd do if I wanted to [achieve specific result].",
+"If I wanted to achieve [desired result] in 1 month, here's what i would do.",
+"I'm going to give you the simplest way to achieve [result].",
+"If you do X things, you'll have Y result by Z time frame.",
+"If you want to [specific desire], do these few things.",
+"If you want to be ahead of the [niche] curve, start doing these X things…",
+"Day X of helping you [achieve niche result] – trending sound with text on screen",
+"Avoid doing these things if you want to [solve pain points].",
+"This is the overall timeline for someone who's [audience's current position] but wants to [achieve niche result].",
+"Here are some realistic ways for you to ______.",
+"Here's what i did to [achieve goal] and [feel feeling]…",
+"This is what you should and shouldn't do if you're trying to __________.",
+"Alright if you need to ______ quickly and you're serious about it, favorite this video so you can come back to it. This is going to change everything for you.",
+"A lot of people are asking how I'm able to do [aspirational thing].",
+"As a [state your expertise], here's one piece of advice to [improve X], it would be this.",
+"I don't know about you but I plan on [achieving X] by [doing Y] this year.",
+"You wouldn't believe these quick hacks that can [achieve niche result].",
+"Here are the real things that helped me to [achieve result].",
+"I promise if you start doing this, you will be the [desired result].",
+"How different would your life look if you actually, had [niche result].",
+"If you want a difficult but sustainable way to [achieve result], this one's for you.",
+"Showcase a client win & use them as an exemplar for a particular strategy.",
+"Here is the exact formula used to [achieve X].",
+"If you're tired of the same old stuff, here's a new way to [achieve/get X].",
+"Do NOT do this if you want [X result].",
+"Hey, I'm [introduce your mission and/or qualifications]. If you want to [achieve thing]…Let's talk.",
+"Want to hear the real thing that'll get you [desired result]?",
+"There's no way I'm gonna let you go another year without [achieving core desire].",
+"The difference between [lower level of success] versus [higher level of success] is…",
+"If you want to [achieve result] in [timeframe] you need to be doing these X things every single day.",
+"This is your sign to start ________. It's been [duration] and I've already [achieved dream result].",
+"Maybe [topic] is easy and you just need to [get rid of X habit or vice].",
+"In just X months you can [achieve Y], but only if you stop [vice or bad habit].",
+"So X years ago I went from [previous shitty reality] to [current dream reality].",
+"[X] started [X] when… (my clients started booking from their reels when…)",
+"Imagine having [X result] and now you get to [X]. Here's how.",
 "I've been using this to [achieve result] myself. And I've helped [client] [achieve result].",
 "If you think it's gonna take you years to get [X result], think again. I'm going to teach you how in as little as [X time], just like my client did.",
 "After working with over [number] clients solving [X problem], I need you to know this is the #1 thing that is overlooked.",
@@ -193,80 +264,221 @@ const FYB_AUTH = [
 "This is exactly how I solved [X problem].",
 "This is my go-to strategy for doing [X].",
 "My client got [X result] without doing [the 3 things your audience thinks it takes].",
-"Here's a [niche] tip that completely changed my life. And I hope it does the same for you.",
 "If I had to start all over as [X], this is the first thing I would do.",
-"Okay, I'm gonna tell you how I managed to get [outcome].",
 "I tell all of my clients to [X] if they want [X].",
 "How I achieved [X] by stopping [X].",
-"I'm [your name] and I wanna talk about…",
 "Something I do every [day / week / month] that helps me [X] is [X].",
-"If I could follow just ONE [niche] rule it would be…",
-"Let's dive into the science of how I get you [X result].",
-"[X] started [X] when… (my clients started making sales from their reels when…)",
-];
-const PEDERSEN = [
-"The best [technique] I've ever done.",
+]],
+ ["Reflective (44)", "They're telling what they'd tell their past self, or what they learned the hard way.", [
+"I wish I could go back and tell my [previous age] self this.",
+"Years ago I [story]",
+"This is the story of...",
+"Here's what I would do if I started my [niche journey] from scratch.",
+"X pieces of advice I'd give my former [Point A] self.",
+"Something i really wish i knew when i started [niche journey]...",
+"Back then i wish i'd known..",
+"With X years of experience in [niche], here's what I've learned.",
+"Ugh, i know i can't go back...but let me tell you – if i could...",
+"Here are 3 things I would never, ever do again as someone trying to…",
+"I've been exactly where you are. [List relatable struggles]. I also spent WAY too long in that place. So, I want to talk about a few things you can do differently.",
+"I love seeing more people trying to ______, so here's my two sense as someone who has been doing this for X years.",
+"Okay, I'm X years old. Here's everything I wish I knew about ______ when I was [X age].",
+"I've been reflecting on my [niche] journey and I have X things I want to share for anyone else on a similar road.",
+"What I wish I knew as a [niche] beginner",
+"Things I've learned now that I'm a…",
+"[Niche] advice that I would tell [X-year old] me.",
+"Old me did not want to believe that [niche goal or struggle] was as simple as [surprisingly helpful tip].",
+"Honestly, if I could restart [niche] knowing what I know now, the last thing I would do is focus on [3 strategies]. Instead I would, [topic of video].",
+"X hard to hear things that would've revolutionized my _______.",
+"I wish someone had told me in my [previous age range (20s)], [your name], ________",
+"I was about to [settle for X] before I found [better route].",
+"If I knew this before starting [niche journey], I would've been [achievement] way faster.",
+"X things I wish I knew before I started…",
+"Life's been better ever since…",
+"In hindsight I...",
+"You know, if i could start all this [niche stuff] from scratch, I'd...",
+"Knowing what I know now, here's what I would do differently in my [niche] journey.",
+"As someone who's already achieved [dream], here's how I'd get there faster.",
+"I would scream this at my younger self if I could…",
+"In my X years of doing [niche]…",
+"If you're not trying waste any more time on your [niche journey], here's some advice from someone who did.",
+"If I had a time machine, here's what I'd tell my former [niche] self.",
+"It's not about [common myth or mishap], it's about [actual solution]",
+"Looking back, we do so many unnecessary things when trying to [achieve X]. As someone who's already overcome [pain] here's some life-changing wisdom need.",
+"This is what I wish someone told me…",
+"I feel like it would be a crime if I didn't show you…",
+"Don't [do X] until you watch this.",
+"Every time I think about how much time I wasted on [unhelpful niche practice], I force myself to make a video to make sure you don't make the same mistakes I did.",
+"If you ever wanted to start X, here's everything I'd do if I started from scratch.",
+"I'm about to talk about something that I don't know if I want to talk about but, [share tough story or life event].",
 "10 [tool types] I wish I knew earlier.",
-"You need this free tool for [vehicle].",
 "I wish I knew about this [vehicle] tip sooner.",
+"I decided to take my [vehicle] seriously 2 months ago.",
+]],
+ ["Question (30)", "The dump opens with, or answers, a question their audience actually asks.", [
+"What if I told you that [surprising fact]?",
+"Do you want [desire] but can't seem to shake [bad habit]?",
+"Are you really ok with staying [describe undesirable current reality] for another year?",
+"I ask my new clients this question every time: [thought provoking niche question]",
+"Are you constantly [vicious niche cycle]?",
+"Are you seriously planning on staying [describe your stuck audience member] forever?",
+"What would I tell myself to achieve [desire] faster?",
+"The most common question I get asked as a [introduce yourself and niche] is…",
+"Care for some wisdom from a [describe your authority] who used to [describe past struggles]?",
+"Between you and me, are you ever afraid that you won't [achieve niche goal]?",
+"Not sure how to [do niche thing]? Do this…",
+"Have you heard of the [theory or thing]?",
+"Guess what the longest study on [topic] found?",
+"Remember when we said we were going to [habit your audience is probably procrastinating]?",
+"Am I the only one who [relatable habit, practice, or belief]?",
+"Would you believe me if I said [surprising fact]?",
+"You don't really want [desire], do you?",
+"Have you ever asked yourself: \"How do I [do niche thing]?\"",
+"Do you feel like [niche] shouldn't be this hard?",
+"Is [niche experience] way harder than you expected?",
+"When you started [niche journey], what did you expect? I expected [your expectation], but I got [initial undesirable reality].",
+"Do you feel like you might never [achieve desire]? If so, let me introduce myself.",
+"Can you please stop [bad niche habit]?",
+"Do you need some extra help on your [niche] journey?",
+"How many more days do you really want to [core audience struggle]?",
+"[Audience], have you ever tried [niche strategy]?",
+"Are you under [age] and feel like you're running out of time to [do or achieve X]?",
+"Is it just me or has anyone else noticed that [shocking discovery]?",
+"I bet you didn't know this. Ever heard of [shocking info]?",
+"Want to know how to do the [technique]?",
+]],
+ ["Synopsis (127)", "A straight teaching video. Here are three things, here's how I do it, here's the mistake.", [
+"Odd but effective ways to…",
+"I'm back with another…",
+"Let me show you my favorite way to X.",
+"If i had just [limited] minutes everyday to work towards [achieving core desire] here's exactly what I'd do.",
+"Here is a beginner-friendly way to [achieve core desire].",
+"Here are more creative ways for you to [achieve core desire].",
+"As a [introduce self], I cannot live without this [item, habit, thing]…",
+"The easiest & most accessible way to get started with [niche].",
+"10 ways to be a better _______.",
+"Here are a couple [niche] things to keep in mind",
+"I have something to share about [niche] that I've been meaning to talk about..",
+"Here's a much better alternative to [common item/practice/thing in your niche]…",
+"3 mindset shifts",
+"Let's talk about…[hot take in your industry].",
+"So this is going to be a X second video of me convincing you to [do X thing].",
+"Things you thought was your X but is actually your Y.",
+"One big misconception about [blank] is [misconception]. now follow up with an explanation.",
+"Something that's been on my mind lately is...",
+"Here is a [niche] starter pack…",
+"So you're ready, to take [niche journey] seriously. Here's what you're going to do.",
+"Here is a [practice] that every [audience identity] should be doing!!",
+"Let's create a daily [niche] routine for you.",
+"Here's a quote that every [describe your audience] needs to hear.",
+"Okay, I'm gonna tell you how I managed to get [outcome].",
+"Here is the easiest way to…",
+"This is probably why you're unable to…",
+"Remember when I talked about [past topic]? Well now we're gonna talking about [new, related topic].",
+"If you're curious about ______, let's talk.",
+"Here is [this month's] [niche] routine!",
+"Something I do every month that helps me _______ is ______.",
+"This is a less known but very harmful myth in the [niche] industry.",
+"Busting X [niche] myths!",
+"One of the most important things to remember in regards to [niche] is…",
+"This is your reminder to…",
+"I genuinely think that [rant about something].",
+"[Items/Habits/Things] I would never use.",
+"Here's what to do if you [describe a confusing scenario that your ideal audience probably runs into frequently]…",
+"Between the ages of [age range]? Here's what you should be doing to get [desired goal] by [upcoming age range].",
+"Ok, hear me out. [Present an uncommon or new strategy in your niche]",
+"The worst possible thing you can do as an aspiring ______ is to…",
+"Without these 3 things, I probably would've never been able to [achieve audience desire].",
+"This is the [thing] that helped [person] to [achieve win], [against odds]…",
+"I've been [doing activity] for [duration] and here's what I've learned.",
+"I designed you a [niche] [routine, schedule, plan] that's going to help you [achieve result] without [pain point or objection].",
+"I'm gonna show you the [document or item] that got me [big result] within [time frame].",
+"X of the worst [habits or actions]",
+"These are 5 [niche] rules I live by as a [describe authority].",
+"I literally don't want to hear any excuses as to why you haven't started [task, project] after watching this video.",
+"Welcome to [topic] 101.",
+"I wish someone would've explained [topic] to me like this.",
+"The worst thing you can do as a [describe audience] who is trying to [achieve result] is to…",
+"X common misconceptions about [topic]",
+"For the last time I'm gonna tell you, [rant].",
+"Here's the dummy's guide for [topic].",
+"Here's what you need to do to prepare for [upcoming timely event].",
+"If you're watching this before [specific date(s)], right now you have to [do thing].",
+"3 [niche] strategies",
+"This is how I [audience desire] without [common pain point or objection].",
+"If I could follow just ONE [niche] rule it would be...",
+"Simple advice for someone that wants [X] but doesn't know how to get it.",
+"Things I had to unlearn in order to [achieve result]",
+"In a nutshell, here's how you get [X] even if you only have [Y]",
+"This is the easiest way for you to…",
+"It's time to start talking about something that a lot of you don't want to talk about...and that's [X].",
+"Here's a [insert your niche] tip that completely changed my life. And I hope it does the same for you.",
+"The mindset behind a successful [niche keyword like entrepreneur or personal trainer] vs. an unsuccessful one comes down to this…",
+"If you are currently in the process of [niche journey], listen up this video is for you.",
+"Give me 1 minute and i'll show you how to..",
+"5 [niche] hacks.",
+"The biggest missing link with your [niche journey] is.",
+"Is [strategy] a viable way to achieve [goal]? Let's talk about it.",
+"Something to keep in mind is",
+"[things] that changed my mindset",
+"Here are 4 ways that you can [achieve X].",
+"In case you didn't know, [shocking niche fact].",
+"I'm [your title or name] and I wanna talk about…",
+"Let's dive into the science of [niche].",
+"Here is an in-depth tutorial for…",
+"My favorite [niche] practice is…",
+"_____ you should know, part X.",
+"[niche] facts you didn't know about, part X.",
+"This might just be the best advice on [niche] that I've ever heard…",
+"Here is the most common mistake people make when it comes to _______.",
+"This is day one of realistic [niche] tips that you can start today.",
+"As someone who's into [niche keyword] I cannot live without [resource]…",
+"This might be why your _______ aren't doing so well.",
+"According to [authority figure], [surprising or helpful fact].",
+"I'm going to tell you guys the [pick a number 1-10] habits that I do everyday that helped me to [achieve things].",
+"Here's how I [achieved X] by myself. Without [common routes your audience takes]…",
+"You're really still using [outdated thing in your niche]? Let me put you onto [much better alternative].",
+"This is exactly how I ________.",
+"What I do vs. what I don't do as a [describe success in your niche].",
+"If you start doing this 1 thing today, you'll get [result] by [future timeline].",
+"How much I made today as a [describe position].",
+"So I hear you want [core audience desire]…",
+"Let me save you $[X] by showing you how to [do niche thing] yourself.",
+"Everyone's talking about X, but no one is talking about Y",
+"The information about [topic] is so [confusing, misleading, difficult to understand, etc]…",
+"I spent X hours researching _________ and this is what I learned.",
+"So you want to do [thing] but you don't want to spend any money up-front. Let me show you how you can do it for free using [alternative tool].",
+"You'd be surprised how easy it is to [achieve X] with [tool].",
+"I tried [trendy tool] for X days and here's what happened.",
+"This is [result I achieved] in [duration] as a [describe job or life situation].",
+"Steal this [niche information or strategy] from me!",
+"[Specific date(s)] are a [adjective] time for you to [do X].",
+"This will take about X minutes and it will completely change the way you view [topic].",
+"Welcome to the series where I show you how to…",
+"Here's why you should start X in [current year].",
+"If I had $X to spend on [niche], I would get…",
+"If I could do just one [niche thing] for the rest of my life, what would it be?",
+"If I had just [limited] minutes every day to work towards [core desire], here's exactly what I'd do.",
+"Here is what to do if you [confusing scenario your audience runs into].",
+"If you want [specific desire], do these few things.",
+"The best [technique] I've ever done.",
+"You need this free tool for [vehicle].",
 "Top 5 sites I use to save time as a [niche].",
-"Nobody is talking about this [vehicle] strategy.",
-"This is why your [vehicle] isn't working.",
-"There's one tiny hack that creates exponential results.",
 "4 free sites to create great [tool types].",
 "Simple way to do [vehicle] for free.",
-"Want to know how to do the [technique]?",
 "How to grow your [vehicle] organically.",
 "5 things you can do right now to improve [vehicle].",
-"This is your sign to start taking your [vehicle] seriously.",
 "How to grow your [vehicle].",
 "Here are 10 ideas you can use for [vehicle].",
-"I just found the best [technique] hack.",
-"[Vehicle] hack that you didn't know about.",
-"I decided to take my [vehicle] seriously 2 months ago.",
 "3 apps every [niche] uses.",
-];
-const AMANDA_VERBAL = [
-"[Rising sign / type / role], this one's for you: [the thing you see in them].",
-"If you're a [callout] with a big audience and an income that stopped growing with it, this is exactly why.",
-"We're the world's top neurosurgeons for everybody else. [Then: and blind on ourselves.]",
-"Your lack of [clarity / consistency / sales] is not the problem. It's a symptom.",
-"Them: [what everyone says you need]. Me: [what you actually did].",
-"You can be deeply spiritual and want 10K months. That IS spiritual.",
-"Can we talk about how you cannot out-post a bad offer?",
-"Four leaks I find in almost every spiritual business.",
-"Two [readers], same gift, one stays at a plateau, one books every call. One difference.",
-"Here's what actually happens on a [your offer], start to finish.",
-"This is what I do before a [your offer] even starts.",
-"She had [the thing they think they need] and literally could not see her own business anymore.",
-"Everyone calculates the cost of saying yes. Nobody calculates the cost of staying.",
-"I don't believe in scripts. I believe in frameworks.",
-"If you've got the pieces but not the structure, here's the one thing I'd do next.",
-];
-const FIRST5 = [
 "The first 5 things I'd [do / change / teach] if you [situation]",
 "The first 5 things I'd change in your builder-grade kitchen if you'd let me",
 "The first 5 Sephora products I'd add to your cart if you only have five minutes to get ready",
 "The 5 lunches I'd add to your weekly rotation if you wanted to lose 15 lbs by Thanksgiving",
-"The first five neighborhoods in Raleigh I'd take you if you were thinking of relocating here",
-"The first five things I'd teach you if you were brand-new to golf",
-"The first 5 things I'd teach your dog if you just brought home a new puppy",
-"The first 5 things I'd have you try from our fall menu if you love sweet treats",
-"The first five books I'd recommend to your tween if they say they hate reading",
-"The first 5 things I'd take off your plate if you hired me as your VA",
-"The first five investments I'd have you make if you were starting with $500",
-];
-S.push({tab:'verbal', title:'Verbal hooks · <em>say this first</em>', lead:'The first sentence out of your mouth. Pick a pattern, say it in your words, never the same pattern two days in a row.', src:'Amanda\'s Fire Your Boss hook list (75), Rachel Pedersen\'s 20 (from 937 viral info TikToks), the hooks from Amanda\'s own audit plan, and Shannon McKinstrie\'s "first 5" reel.', lists:[
- ['Amanda\'s own, from the audit plan', AMANDA_VERBAL],
- ['Educational (25)', FYB_EDU],
- ['Storytelling, relatable, inspirational (29)', FYB_STORY],
- ['Authority (21)', FYB_AUTH],
- ['Rachel Pedersen\'s 20 viral info hooks', PEDERSEN],
- ['The "first 5" format · Shannon McKinstrie\'s examples, as written', FIRST5],
+]]
 ]});
-
-// ---------- RE-HOOKS ----------
-const REHOOKS = [
+S.push({tab:'rehook', title:'Mid-sentence <em>re-hooks</em>', lead:'Say one of these 3 to 5 seconds in, without pausing, as if you forgot to finish the thought. Finish the sentence with your own line so it runs straight into the first beat.', lists:[
+ ['The ten formats', '', [
 "…just kidding, I'm not done because the thing is…",
 "…yes I know it sounds crazy but…",
 "…and you know what else?",
@@ -277,28 +489,10 @@ const REHOOKS = [
 "…so if you've been wondering why [problem] keeps happening, this might be it.",
 "…and that is why I'll never ___ again…",
 "…and if you've been ___ [name situation they're in], I want you to hear this.",
-];
-S.push({tab:'rehook', title:'Mid-sentence <em>re-hooks</em>', lead:'Say one of these 3 to 5 seconds in, without pausing, as if you forgot to finish the thought. These are the formats as written. Fill the blanks with that day\'s topic in your own words.', src:'Shannon McKinstrie\'s "10 mid-sentence hooks to start your talk-to-camera videos" (Instagram reel), word for word.', lists:[
- ['The ten formats', REHOOKS],
+]]
 ]});
-
-// ---------- TITLE HOOKS ----------
-const TITLE_RULES_HTML = `
-<div class="rule"><b>1</b><div>Under 5 words. Short and simple.</div></div>
-<div class="rule"><b>2</b><div>One word in CAPS. The keyword, not the whole line.</div></div>
-<div class="rule"><b>3</b><div>Say something DIFFERENT out loud than what the title says. If the title is "4 leaks in your business", the first words out of your mouth are not "here are four leaks".</div></div>
-<div class="rule"><b>4</b><div>Top or middle of the frame. The caption covers the bottom.</div></div>
-<div class="rule"><b>5</b><div>Emojis and dates help. "Do this before 11/11" outperforms "Do this".</div></div>`;
-const TITLE_SPIRIT = [
-"Manifest Wealth INSTANTLY","Your Energy = Your Bank","Reprogram Your Mind FAST","Signs Money Is Coming","Magnetic Woman ENERGY","Advice from a heart-led multi-millionaire","This BLOCKS Your Manifestation","Speak This = More Money","Money Loves This Energy","What You Focus On GROWS","Shift Your Vibe Fast","This Attracts DREAM Clients","Stop Doing This Now","Upgrade Your Mindset FAST","Let Go = Receive More","This Changes EVERYTHING","Manifest Faster With This",
-"Overcome Self-Doubt in 3 Steps","Mindset Shifts for SUCCESS","Break Free from Limiting Beliefs","Unlock Your Full Potential",
-"Connect with Your Higher Self","Understanding Your Spirit Guides","Embrace Your Spiritual Awakening","Full Moon Rituals for Releasing",
-"Stop Doing THIS to Your Business","The Real Reason Your Offer Isn't Selling","Your Pricing Is RUINING Your Upgrades","The Secret Nobody Talks About","I Stopped Doing THIS & Everything Changed",
-];
-const TITLE_AMANDA = [
-"[Callout] ♎️ with the gift but no SYSTEM","Why [callout] can't fix their OWN business","Clarity is a SYMPTOM","Audit prep nobody SEES","No team. Just STRUCTURE 🇪🇸","Money is SPIRITUAL","Power you can't SEE","You can't out-post THIS","4 LEAKS in your business","Why members LEAVE","Inside a 60-min AUDIT","Starting at ZERO again?","Same gift. Totally different INCOME.","Followers ≠ income","Stop selling by the HOUR","You don't need another COURSE","She had the PIECES","Why nobody UPGRADES","Paid to EXIST ♎️","Winging it isn't INTUITION","The cost of STAYING","It wasn't HUSTLE","A new niche won't SAVE you","I find it BEFORE we talk","Scripts vs FRAMEWORKS","Big audience, totally STUCK","Buy the lamp. Raise the price.","Low views, HIGH sales","Pieces, no STRUCTURE",
-];
-const TITLE_FORMULAS = [
+S.push({tab:'title', title:'Title hooks · <em>the text on screen</em>', lead:'Under 5 words, one word in CAPS. It says something different from the first sentence you speak.', html:"<div class=\"rule\"><b>1</b><div>Under 5 words. Short and simple.</div></div><div class=\"rule\"><b>2</b><div>One word in CAPS. The keyword, not the whole line.</div></div><div class=\"rule\"><b>3</b><div>Say something DIFFERENT out loud than what the title says. If the title is &quot;4 leaks in your business&quot;, the first words out of your mouth are not &quot;here are four leaks&quot;.</div></div><div class=\"rule\"><b>4</b><div>Top or middle of the frame. The caption covers the bottom.</div></div><div class=\"rule\"><b>5</b><div>Emojis and dates help. &quot;Do this before 11/11&quot; outperforms &quot;Do this&quot;.</div></div>", titleList:true, lists:[
+ ['Formulas · formula, then an example', '', [
 "[Callout] [emoji] + the gap: 'Libra Rising ♎️ the missing piece'",
 "[Thing] is a SYMPTOM / isn't [what they think]: 'Clarity is a SYMPTOM', 'Winging it isn't INTUITION'",
 "Why [who] [bad outcome]: 'Why nobody UPGRADES', 'Why members LEAVE'",
@@ -311,135 +505,121 @@ const TITLE_FORMULAS = [
 "Contrast on one line: 'Big audience, totally STUCK', 'Low views, HIGH sales'",
 "Two short sentences: 'Buy the lamp. Raise the price.'",
 "Same [X]. Different [Y].: 'Same gift. Totally different INCOME.'",
-];
-S.push({tab:'title', title:'Title hooks · <em>text on screen</em>', lead:'The words on the video. Short, one CAPS word, and a different sentence from what you say first.', src:'Rules and spiritual examples from the viral title hooks swipe file; the rest from Amanda\'s audit plan.', html:TITLE_RULES_HTML, lists:[
- ['Formulas that work for spiritual business', TITLE_FORMULAS],
- ['From Amanda\'s plan (swap the callout and the noun)', TITLE_AMANDA],
- ['Manifestation, mindset, spiritual (swipe file)', TITLE_SPIRIT],
-], titleList:true});
+]],
+ ['Ready-made title hooks', '', [
+"Manifest Wealth INSTANTLY",
+"Your Energy = Your Bank",
+"Reprogram Your Mind FAST",
+"Signs Money Is Coming",
+"Magnetic Woman ENERGY",
+"Advice from a heart-led multi-millionaire",
+"This BLOCKS Your Manifestation",
+"Speak This = More Money",
+"Money Loves This Energy",
+"What You Focus On GROWS",
+"Shift Your Vibe Fast",
+"This Attracts DREAM Clients",
+"Stop Doing This Now",
+"Upgrade Your Mindset FAST",
+"Let Go = Receive More",
+"This Changes EVERYTHING",
+"Manifest Faster With This",
+"Overcome Self-Doubt in 3 Steps",
+"Mindset Shifts for SUCCESS",
+"Break Free from Limiting Beliefs",
+"Unlock Your Full Potential",
+"Connect with Your Higher Self",
+"Understanding Your Spirit Guides",
+"Embrace Your Spiritual Awakening",
+"Full Moon Rituals for Releasing",
+"Stop Doing THIS to Your Business",
+"The Real Reason Your Offer Isn't Selling",
+"Your Pricing Is RUINING Your Upgrades",
+"The Secret Nobody Talks About",
+"I Stopped Doing THIS & Everything Changed",
+]]
+]});
+S.push({tab:'fw', title:'Title <em>frameworks</em>', lead:"Built for long-form titles, and the same frameworks work for a reel title, a carousel cover, a post headline or an ad. Match the piece to the framework that amplifies it, generate ten, keep the strongest three.", html:"<div class=\"rule\"><b>1</b><div>Front-load the search keyword in the first 3 to 5 words.</div></div><div class=\"rule\"><b>2</b><div>7 to 11 words, under 55 characters. Mobile truncates after that.</div></div><div class=\"rule\"><b>3</b><div>Use the exact phrase they&#x27;d type at 11pm when they&#x27;re stuck.</div></div><div class=\"rule\"><b>4</b><div>One power word per title. Capitalise at most one word.</div></div><div class=\"rule\"><b>5</b><div>A bracket adds a second promise: (Step by Step), (Without Burnout), (For Readers).</div></div><div class=\"rule\"><b>6</b><div>Label each title Search (they typed it) or Browse (they scrolled into it). Make some of each.</div></div><div class=\"rule\"><b>7</b><div>No year unless it&#x27;s genuinely time-sensitive. No clickbait, no salesy words.</div></div><h3>Title + thumbnail never say the same thing</h3><div class=\"pair\"><div class=\"bad\"><small>Repeats</small>Title: &quot;Five pricing myths&quot; · Thumb: &quot;Five pricing myths&quot;</div><div class=\"good\"><small>Complements</small>Title: &quot;Five pricing myths&quot; · Thumb: &quot;You&#x27;re doing it wrong&quot;</div></div><p class=\"ex\">Title asks, thumbnail hints. Title promises, thumbnail adds urgency. Title states the problem, thumbnail shows the feeling.</p>", lists:[
+ ["Outcome-based (desire)", '', [
+"How to [achieve outcome] without [undesirable thing]",
+"[Search term]: The [method] That Actually Works",
+"How I [achieved result] in [timeframe] (and How You Can Too)",
+"The Laziest Way to [achieve outcome] as a [niche role]",
+"[Search term]: My Exact [number]-Step Method",
+"From [starting point] to [result] Using [specific method]",
+"What [dream outcome] Actually Looks Like for [niche role]",
+"Give Me [short timeframe] and I Will Make Your [thing] [percentage] Better",
+]],
+ ["Contrarian / pattern interrupt (curiosity + fear)", '', [
+"Stop [common advice]. Do This Instead for [outcome]",
+"Why [common belief] Is Keeping You [stuck / overwhelmed]",
+"[Niche thing] Is Not Hard. You Are Just Doing It Wrong.",
+"I Quit [expected thing] and [unexpected result] Happened",
+"[Common advice] Is BS (for [specific audience])",
+"You Do Not [x]. You Want [y].",
+"Why [unexpected thing] Is Not Enough",
+]],
+ ["Timeframe / speed (desire + curiosity)", '', [
+"[Search term] in [short timeframe] (Step by Step)",
+"[Number] Minutes of No-BS [Niche] Advice",
+"How to [outcome] in [timeframe] Even If You Are Starting from Zero",
+"Give Me [timeframe] and You Will Never [bad thing] Again",
+"I [bold action] for [timeframe]. This Is What Happened.",
+]],
+ ["Authority / proof (desire + curiosity)", '', [
+"How [authority type] [achieve result] (and You Can Copy Them)",
+"I [did massive thing]. Here Is What Actually Works.",
+"[Number] Things [successful people] Do That You Do Not",
+"I Helped [number] [clients] [achieve result]. Here Is the Pattern.",
+"I Studied [number] [niche thing]. This Is What Will [achieve result].",
+]],
+ ["Secrets / insider (curiosity)", '', [
+"[Search term]: [Number] Secrets That Feel Like Cheating",
+"What Nobody Tells You About [niche thing]",
+"The [method] That Gives You an Unfair Advantage in [niche]",
+"The [niche] Strategy Nobody Is Talking About",
+]],
+ ["Mistakes / avoidance (fear)", '', [
+"[Number] [Niche] Mistakes That Are Costing You [clients / money / time]",
+"Do Not [do thing] Until You Watch This",
+"Why You Are Not Getting [desired result] (It Is Not What You Think)",
+"This ONE Mistake Is Killing Your [niche thing]",
+"[Number] [Good] Habits That Are Actually Keeping You [stuck]",
+]],
+ ["Transformation / journey (desire + curiosity)", '', [
+"I Tried [new approach] for [timeframe]. Here Is What Happened.",
+"From [undesirable state] to [desirable state] Using [method]",
+"I Changed ONE Thing and [dramatic result]",
+"How I Went from [starting point] to [current result]",
+"So You Have [taken action]. Here Is How to [continue].",
+]],
+ ["Curiosity gap / open loop (curiosity)", '', [
+"This Is All It Takes to [achieve outcome]",
+"The [niche] Advice That Rewired My Brain",
+"I Was Wrong About [thing]. Here Is What I Learned.",
+"The Ugly Truth About [niche thing] Nobody Wants to Hear",
+"This [simple thing] Will [transform outcome] (Most [niche people] Miss It)",
+]],
+ ["Proven top performers", '', [
+"I tested [X] vs [Y]. Here's what won.",
+"Getting [addicted to / obsessed with] [X] is easy. (contradiction)",
+"How to [achieve goal] without [unwanted action]",
+"NEVER say this [on a sales call / in a DM]…",
+"What happens to [X] that never [Y]?",
+"Is there a difference between [X] and [Y]?",
+"The REALITY of [polarizing thing] in [current year]",
+"5 [X] habits that [Y]",
+"I went to all [X]. Here are my rankings.",
+"From [screw-up] to [legend]: [the turning point]",
+]]
+]});
 
-// ---------- YOUTUBE TITLES ----------
-const YT = [
- ['Outcome-based (desire)', [
- "How to [achieve outcome] without [undesirable thing]",
- "[Search term]: The [method] That Actually Works",
- "How I [achieved result] in [timeframe] (and How You Can Too)",
- "The Laziest Way to [achieve outcome] as a [niche role]",
- "[Search term]: My Exact [number]-Step Method",
- "From [starting point] to [result] Using [specific method]",
- "What [dream outcome] Actually Looks Like for [niche role]",
- "Give Me [short timeframe] and I Will Make Your [thing] [percentage] Better",
- ]],
- ['Contrarian / pattern interrupt (curiosity + fear)', [
- "Stop [common advice]. Do This Instead for [outcome]",
- "Why [common belief] Is Keeping You [stuck / overwhelmed]",
- "[Niche thing] Is Not Hard. You Are Just Doing It Wrong.",
- "I Quit [expected thing] and [unexpected result] Happened",
- "[Common advice] Is BS (for [specific audience])",
- "You Do Not [x]. You Want [y].",
- "Why [unexpected thing] Is Not Enough",
- ]],
- ['Timeframe / speed (desire + curiosity)', [
- "[Search term] in [short timeframe] (Step by Step)",
- "[Number] Minutes of No-BS [Niche] Advice",
- "How to [outcome] in [timeframe] Even If You Are Starting from Zero",
- "Give Me [timeframe] and You Will Never [bad thing] Again",
- "I [bold action] for [timeframe]. This Is What Happened.",
- ]],
- ['Authority / proof (desire + curiosity)', [
- "How [authority type] [achieve result] (and You Can Copy Them)",
- "I [did massive thing]. Here Is What Actually Works.",
- "[Number] Things [successful people] Do That You Do Not",
- "I Helped [number] [clients] [achieve result]. Here Is the Pattern.",
- "I Studied [number] [niche thing]. This Is What Will [achieve result].",
- ]],
- ['Secrets / insider (curiosity)', [
- "[Search term]: [Number] Secrets That Feel Like Cheating",
- "What Nobody Tells You About [niche thing]",
- "The [method] That Gives You an Unfair Advantage in [niche]",
- "The [niche] Strategy Nobody Is Talking About",
- ]],
- ['Mistakes / avoidance (fear)', [
- "[Number] [Niche] Mistakes That Are Costing You [clients / money / time]",
- "Do Not [do thing] Until You Watch This",
- "Why You Are Not Getting [desired result] (It Is Not What You Think)",
- "This ONE Mistake Is Killing Your [niche thing]",
- "[Number] [Good] Habits That Are Actually Keeping You [stuck]",
- ]],
- ['Transformation / journey (desire + curiosity)', [
- "I Tried [new approach] for [timeframe]. Here Is What Happened.",
- "From [undesirable state] to [desirable state] Using [method]",
- "I Changed ONE Thing and [dramatic result]",
- "How I Went from [starting point] to [current result]",
- "So You Have [taken action]. Here Is How to [continue].",
- ]],
- ['Curiosity gap / open loop (curiosity)', [
- "This Is All It Takes to [achieve outcome]",
- "The [niche] Advice That Rewired My Brain",
- "I Was Wrong About [thing]. Here Is What I Learned.",
- "The Ugly Truth About [niche thing] Nobody Wants to Hear",
- "This [simple thing] Will [transform outcome] (Most [niche people] Miss It)",
- ]],
- ['Creator Hooks top performers (highest hook scores)', [
- "I tested [X] vs [Y]. Here's what won.",
- "Getting [addicted to / obsessed with] [X] is easy. (contradiction)",
- "How to [achieve goal] without [unwanted action]",
- "NEVER say this [on a sales call / in a DM]…",
- "What happens to [X] that never [Y]?",
- "Is there a difference between [X] and [Y]?",
- "The REALITY of [polarizing thing] in [current year]",
- "5 [X] habits that [Y]",
- "I went to all [X]. Here are my rankings.",
- "From [screw-up] to [legend]: [the turning point]",
- ]],
-];
-const YT_RULES = `
-<div class="rule"><b>1</b><div>Front-load the search keyword in the first 3 to 5 words.</div></div>
-<div class="rule"><b>2</b><div>7 to 11 words, under 55 characters. Mobile truncates after that, and 70% of views are mobile.</div></div>
-<div class="rule"><b>3</b><div>Use the exact phrase they'd type at 11pm when they're stuck.</div></div>
-<div class="rule"><b>4</b><div>One power word per title. Capitalise at most one word.</div></div>
-<div class="rule"><b>5</b><div>A bracket adds a second promise: (Step by Step), (Without Burnout), (For Readers).</div></div>
-<div class="rule"><b>6</b><div>Label each title Search (they typed it) or Browse (they scrolled into it). Make some of each.</div></div>
-<div class="rule"><b>7</b><div>No year unless it's genuinely time-sensitive. Evergreen compounds. No clickbait, no em dashes, no salesy words.</div></div>
-<h3>Title + thumbnail never say the same thing</h3>
-<div class="pair"><div class="bad"><small>Repeats</small>Title: "Five pricing myths" · Thumb: "Five pricing myths"</div><div class="good"><small>Complements</small>Title: "Five pricing myths" · Thumb: "You're doing it wrong"</div></div>
-<p class="ex">Title asks, thumbnail hints. Title promises, thumbnail adds urgency ("before it's too late"). Title states the problem, thumbnail shows the feeling. Amanda's thumbnail formula: 2 to 4 CAPS words, one icon, her face, dark background.</p>`;
-S.push({tab:'yt', title:'YouTube title <em>frameworks</em>', lead:'For long-form. Match the video to the framework that amplifies it, generate ten, keep the strongest three, then pair each with a thumbnail that says something else.', src:'The viral-youtube-titles formula library, Creator Hooks (Jake Thomas) frameworks ranked by hook score, Andrew Muto\'s universalise / dial-to-11 / McDonald\'s test.', html:YT_RULES, lists:YT});
-
-// ---------- CTA + CAPTION ----------
-S.push({tab:'cta', title:'CTA and <em>caption</em>', lead:'One verbal CTA per video. Name the thing, say where it is. The caption repeats what you just promised, then adds the keyword.', src:'How Amanda\'s own 30-day audit plan is built.', html:`
-<h3>Verbal CTA · one ask, names the thing</h3>
-<ul class="hooks">
-<li>"I broke the whole thing down in my [free thing]. It's free, grab it below."</li>
-<li>"If you're [who the offer is for], the [offer name] details are below."</li>
-<li>"If you want me to find yours, the details are below."</li>
-<li>"So if you're an expert with [5,000 plus followers] and proven client results, comment [KEYWORD] when you want to understand the number one thing blocking you from your next level, and your next three moves for the next 90 days."</li>
-</ul>
-<p class="ex">Pick one. Two spoken CTAs split the viewer at the exact second they should be deciding. The outline's last bullet has to set the CTA up so it's the natural next sentence, not a bolt-on.</p>
-<h3>The caption · four parts, nothing else</h3>
-<div class="cap"><b>Comment [KEYWORD] when you're ready to [the outcome THIS video promised] 🔮</b>
-
-[Your story in two or three sentences. Where you were, where you are now, who you work with. Lead with the contrast, not the income. Same lines every day.]
-
-<b>[One line about this video's point]: comment [GIFT WORD] for [the free thing] where I break the whole thing down.</b>
-
-[Optional closing line, same every day. Where to find you, or what's happening with your community.]</div>
-<p class="ex">Line 1 connects to what you just said on camera. The gift line carries the video's hook, so the person who isn't ready for the offer still gets the thing the video was about. The offer keyword appears once.</p>
-<h3>Who you're talking to</h3>
-<ul class="hooks">
-<li>Speak to the person at the level they're actually at. If your offer is for people with a platform and first dollars made, never describe them as broke, without clients, or starting from zero. Name the plateau, not the poverty.</li>
-<li>Allowed: income that stopped growing, the same handful of bookings, flat income, stuck at a plateau, scale past where you are, no recurring revenue, burned out on 1:1, ready to leave the job.</li>
-<li>No income claim as the hook. No urgency you can't back up. "Limited availability", never a number of spots.</li>
-</ul>
-`});
-
-// ---------- RENDER ----------
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function render(){
   const main=document.getElementById('main'); let h='';
   for(const sec of S){
-    h+=`<section class="sec grid" data-tab="${sec.tab}"><h2>${sec.title}</h2><p class="lead">${sec.lead}</p>${sec.src?`<p class="src">Source: ${sec.src}</p>`:''}${sec.html||''}`;
-    if(sec.lists){ for(const [name,items] of sec.lists){ h+=`<h3>${esc(name)}</h3><ul class="hooks${sec.titleList?' title':''}">${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`; } }
+    h+=`<section class="sec grid" data-tab="${sec.tab}"><h2>${sec.title}</h2><p class="lead">${sec.lead}</p>${sec.html||''}`;
+    if(sec.lists){ for(const [name,use,items] of sec.lists){ h+=`<h3>${esc(name)}</h3>${use?`<p class="use"><b>Use when</b> · ${esc(use)}</p>`:''}<ul class="hooks${sec.titleList?' title':''}">${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`; } }
     h+=`</section>`;
   }
   main.innerHTML=h; applyFilter();
